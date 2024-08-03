@@ -1,11 +1,13 @@
 const { Router } = require("express");
 const { usersTable } = require("../db/tables");
-const passport = require('passport');
+const passport = require("passport");
+const bcrypt = require("bcryptjs");
+const { isAuth, isAdmin } = require("../controllers/authenticate");
 
 const indexRouter = Router();
 
 indexRouter.get("/", (req, res) => {
-  console.log(req);
+  console.log("REQ.USER --> ", req.user);
   res.render("index");
 });
 
@@ -17,7 +19,7 @@ indexRouter.post("/sign-up", async (req, res, next) => {
   try {
     const { firstName, lastName, email, password } = req.body;
     const salt = 10;
-    const hash = await bcryptjs.hash(password, salt);
+    const hash = await bcrypt.hash(password, salt);
 
     const rows = await usersTable.insert({
       columns: [
@@ -52,6 +54,14 @@ indexRouter.get("/log-out", (req, res, next) => {
     }
     res.redirect("/");
   });
+});
+
+indexRouter.get("/member", isAuth, (req, res) => {
+  res.send("This is the member page");
+});
+
+indexRouter.get("/admin", isAdmin, (req, res) => {
+  res.send("This is the admin page");
 });
 
 module.exports = indexRouter;

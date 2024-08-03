@@ -47,7 +47,7 @@ passport.deserializeUser(async (id, done) => {
     console.log("In deserialize User:", id);
     const rows = await usersTable.select({
       column: "id",
-      condition: `= £{id}`,
+      condition: `= ${id}`,
     });
     const user = rows[0];
     console.log("User found:", user);
