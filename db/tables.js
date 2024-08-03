@@ -93,7 +93,12 @@ function Table(tableName) {
     }
 
     if (!select) {
-      const sql = format("SELECT * FROM %I WHERE %I %s;", name, column, condition);
+      const sql = format(
+        "SELECT * FROM %I WHERE %I %s;",
+        name,
+        column,
+        condition,
+      );
       console.log(sql);
       const rows = await query(sql);
       console.log(rows);
@@ -117,61 +122,31 @@ function Table(tableName) {
     console.log(rows);
     return rows;
   };
+
+  this.insert = async function (options) {
+    const { columns, values } = options;
+
+    if (!columns || !values) {
+      throw new Error("invalid query");
+    }
+
+    const isValid = await validateColumns(columns);
+    if (!isValid) {
+      throw new Error("invalid columns");
+    }
+    let valueString = "VALUES (";
+    for (let i = 1; i <= values.length; i++) {
+      const param = i !== values.length ? `$${i}, ` : `$${i})`;
+      valueString += param;
+    }
+    let sql = `INSERT INTO ${name} (${columns}) ${valueString} RETURNING *;`;
+    const rows = await query(sql, values);
+    console.log(rows);
+    return rows
+  };
 }
 
 const usersTable = new Table("users");
 const messagesTable = new Table("messages");
 
-//usersTable.selectById(1);
-//usersTable.selectAll();
-usersTable.select({ column: "first_name", condition: "LIKE '%il%' OR first_name LIKE '%ia%'" });
-//usersTable.select({ column: "email", value: "ciaranoc@poo.com" });
-
-//messagesTable.selectAll();
-
 module.exports = { usersTable, messagesTable };
-
-/*const usersTable = {
-  tableName: "users",
-
-  select: async function (queryOptions) {
-    let sql;
-
-    if (!queryOptions) {
-      sql = `SELECT * FROM ${this.tableName};`;
-    } else {
-      const { column, value } = queryOptions;
-    }
-  },
-
-  selectAllUsers: async function () {
-    try {
-      const res = await pool.query("SELECT * FROM users;");
-      console.log(res);
-      if (res.rows.length === 0) {
-        return false;
-      }
-      return res.rows;
-    } catch (error) {
-      throw new Error("Database error");
-    }
-  },
-  selectByEmail: async function (email) {
-    try {
-      const { rows } = await pool.query(
-        `
-        SELECT * FROM users 
-        WHERE email = $1;
-        `[email],
-      );
-      const user = rows[0];
-      if (!user) return false;
-
-      return user;
-    } catch (error) {
-      throw new Error("Database error");
-    }
-  },
-};*/
-
-//module.exports = { usersTable };
