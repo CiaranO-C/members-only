@@ -1,43 +1,24 @@
 const { Router } = require("express");
-const { usersTable } = require("../db/tables");
 const passport = require("passport");
-const bcrypt = require("bcryptjs");
-const { isAuth, isAdmin } = require("../controllers/authenticate");
+const {
+  isAuth,
+  isAdmin,
+  isMember,
+  isUser,
+} = require("../controllers/authenticate");
+const indexController = require("../controllers/indexController");
+const adminRouter = require("./adminRouter");
+const memberRouter = require("./memberRouter");
 
 const indexRouter = Router();
 
-indexRouter.get("/", (req, res) => {
-  console.log("REQ.USER --> ", req.user);
-  res.render("index");
-});
+indexRouter.get("/", indexController.indexGet);
 
-indexRouter.get("/sign-up", (req, res) => {
-  res.render("sign-up-form");
-});
+indexRouter.get("/sign-up", indexController.signUpGet);
 
-indexRouter.post("/sign-up", async (req, res, next) => {
-  try {
-    const { firstName, lastName, email, password } = req.body;
-    const salt = 10;
-    const hash = await bcrypt.hash(password, salt);
+indexRouter.post("/sign-up", indexController.signUpPost);
 
-    const rows = await usersTable.insert({
-      columns: [
-        "first_name",
-        "last_name",
-        "email",
-        "password_hash",
-        "salt",
-        "member",
-      ],
-      values: [firstName, lastName, email, hash, salt, false],
-    });
-    console.log("New User:", rows);
-    res.redirect("/");
-  } catch (error) {
-    return next(err);
-  }
-});
+indexRouter.get("/log-in", indexController.logInGet);
 
 indexRouter.post(
   "/log-in",
@@ -47,21 +28,13 @@ indexRouter.post(
   }),
 );
 
-indexRouter.get("/log-out", (req, res, next) => {
-  req.logOut((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
-});
+indexRouter.get("/log-out", indexController.logOutGet);
 
-indexRouter.get("/member", isAuth, (req, res) => {
-  res.send("This is the member page");
-});
+indexRouter.get("/join-club", isUser, indexController.joinClubGet);
 
-indexRouter.get("/admin", isAdmin, (req, res) => {
-  res.send("This is the admin page");
-});
+indexRouter.post("/join-club", isUser, indexController.joinClubPost);
+
+indexRouter.use("/member", isMember, memberRouter);
+indexRouter.use("/admin", isAdmin, adminRouter);
 
 module.exports = indexRouter;
