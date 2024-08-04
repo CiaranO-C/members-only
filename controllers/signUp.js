@@ -63,7 +63,7 @@ const signUpPost = [
     .notEmpty()
     .withMessage("Password confirmation required")
     .custom((value, { req }) => {
-      const password = req.password;
+      const password = req.body.password;
       if (value !== password) {
         throw new Error("Passwords do not match");
       }
