@@ -54,6 +54,11 @@ passport.deserializeUser(async (id, done) => {
 });
 
 app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
+app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   next();
 });
