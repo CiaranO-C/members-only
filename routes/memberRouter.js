@@ -3,12 +3,8 @@ const memberController = require('../controllers/memberController');
 
 const memberRouter = Router();
 
-memberRouter.get("/", (req, res) => {
-    res.send("This is the member page");
-});
+memberRouter.get("/join-admin", memberController.joinAdminGet);
 
-memberRouter.get('/join-club', memberController.joinClubGet)
+memberRouter.post("/join-admin", memberController.joinAdminPost)
 
-memberRouter.post('/join-club', memberController.joinClubPost)
-
-  module.exports = memberRouter
+  module.exports = memberRouter;
