@@ -1,7 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const { usersTable } = require("../db/tables");
 const bcrypt = require("bcryptjs");
-const { errors } = require("formidable");
 
 const signUpPost = [
   body("firstName")
@@ -34,13 +33,19 @@ const signUpPost = [
           column: "email",
           condition: `= '${value}'`,
         });
+
         const user = rows[0];
+        console.log("user ->", user);
         if (user) {
           throw new Error("Email already in use");
         }
         return true;
       } catch (error) {
-        throw new Error("Server error");
+        if (error.message === "Email already in use") {
+          throw error;
+        } else {
+          throw new Error("Server error");
+        }
       }
     })
     .escape(),
@@ -65,15 +70,16 @@ const signUpPost = [
       return true;
     }),
   async function (req, res, next) {
+    const { firstName, lastName, email, password } = req.body;
     const err = validationResult(req);
     if (!err.isEmpty()) {
       return res.render("sign-up-form", {
+        values: { firstName, lastName, email, password },
         errors: err.array(),
       });
     }
 
     try {
-      const { firstName, lastName, email, password } = req.body;
       const salt = 10;
       const hash = await bcrypt.hash(password, salt);
 
@@ -96,5 +102,4 @@ const signUpPost = [
   },
 ];
 
-
-module.exports = { signUpPost }
+module.exports = { signUpPost };
