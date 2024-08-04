@@ -1,0 +1,11 @@
+<body>
+    <h1>Become an admin!</h1>
+    <% if(locals.message) { %>
+        <h2><%= message %></h2>
+        <% } %>
+    <form action="" method="POST">
+        <label for="adminPassword">Password</label>
+     <input id="adminPassword" type="text" name="adminPassword">
+    <button>Make me admin!</button>
+    </form>
+</body>
