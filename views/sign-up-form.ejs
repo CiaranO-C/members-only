@@ -4,19 +4,50 @@
   <meta charset="UTF-8">
   <title></title>
 </head>
+<%
+function getErrors(path){
+  const groupedErrors = locals.errors.filter(err => err.path === path);
+  return groupedErrors;
+} 
+%>
 <body>
   <h1>Sign Up</h1>
   <form action="" method="POST">
     <label for="username">First Name</label>
     <input id="username" name="firstName" placeholder="John" type="text" />
+    <ul class="error container" id="firstNameErrors">
+      <% if(locals.errors) { getErrors('firstName').forEach(err => { %>
+        <li><%= err.msg %></li>
+        <% })} %>
+    </ul>
     <label for="lastName">Last Name</label>
     <input id="lastName" name="lastName" placeholder="Smith" type="text" />
+    <ul class="error container" id="LastNameErrors">
+      <% if(locals.errors) { getErrors('lastName').forEach(err => { %>
+        <li><%= err.msg %></li>
+        <% })} %>
+    </ul>
     <label for="email">Email</label>
     <input id="email" name="email" placeholder="johnsmith@members.com" type="email" />
+    <ul class="error container" id="emailErrors">
+      <% if(locals.errors) { getErrors('email').forEach(err => { %>
+        <li><%= err.msg %></li>
+        <% })} %>
+    </ul>
     <label for="password">Password</label>
     <input id="password" name="password" type="password" />
+    <ul class="error container" id="passwordErrors">
+      <% if(locals.errors) { getErrors('password').forEach(err => { %>
+        <li><%= err.msg %></li>
+        <% })} %>
+    </ul>
     <label for="confirmPassword">Confirm Password</label>
     <input id="confirmPassword" name="confirmPassword" type="password" />
+    <ul class="error container" id="confirmPasswordErrors">
+      <% if(locals.errors) { getErrors('confirmPassword').forEach(err => { %>
+        <li><%= err.msg %></li>
+        <% })} %>
+    </ul>
     <button>Sign Up</button>
   </form>
 </body>
