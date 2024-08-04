@@ -3,9 +3,11 @@
     <% if(locals.message) { %>
         <h2><%= message %></h2>
         <% } %>
-    <form action="" method="POST">
-        <label for="clubPassword">Password</label>
-     <input id="clubPassword" type="text" name="clubPassword">
-    <button>Join the club</button>
-    </form>
+        <form action="/log-in" method="POST">
+            <label for="username">Username</label>
+            <input id="username" name="username" placeholder="username" type="text" />
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" />
+            <button>Log In</button>
+        </form>
 </body>
