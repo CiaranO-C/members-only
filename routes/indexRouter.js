@@ -9,10 +9,11 @@ const {
 const indexController = require("../controllers/indexController");
 const adminRouter = require("./adminRouter");
 const memberRouter = require("./memberRouter");
+const userRouter = require('./userRouter')
 
 const indexRouter = Router();
 
-indexRouter.get('/message-board', indexController.messageBoardGet)
+indexRouter.get("/message-board", indexController.messageBoardGet);
 
 indexRouter.get("/", indexController.indexGet);
 
@@ -30,15 +31,8 @@ indexRouter.post(
   }),
 );
 
-indexRouter.get("/log-out", indexController.logOutGet);
-
-indexRouter.get("/join-club", isUser, indexController.joinClubGet);
-
-indexRouter.post("/join-club", isUser, indexController.joinClubPost);
-
+indexRouter.use("/user", isUser, userRouter);
 indexRouter.use("/member", isMember, memberRouter);
 indexRouter.use("/admin", isAdmin, adminRouter);
-
-
 
 module.exports = indexRouter;

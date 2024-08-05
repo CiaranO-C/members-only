@@ -7,12 +7,12 @@
 <body>
   <% if (currentUser) {%>
     <h1>Welcome back, <%= currentUser.first_name + ' ' + currentUser.last_name %></h1>
-    <a href="/log-out">LOG OUT</a>
+    <a href="/user/log-out">LOG OUT</a>
     <% if(!currentUser.admin) { %>
       <% if(!currentUser.member) { %>
-        <a href="/join-club">Join the club</a>
+        <a href="/user/join-club">Join the club</a>
       <% } else { %>
-        <a href="/join-admin">Become an Admin!</a>
+        <a href="/member/join-admin">Become an Admin!</a>
       <% } %>
     <% } %>
     <a href="/member/create-message">Send a message</a>
@@ -20,15 +20,9 @@
     <a href="/admin">Admin page</a>
   <% } else { %>
     <h1>Log in to send a message!</h1>
-    <form action="/log-in" method="POST">
-      <label for="username">Username</label>
-      <input id="username" name="username" placeholder="username" type="text" />
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" />
-      <button>Log In</button>
-    </form>
     <a href="/log-in">Log in</a>
     <a href="/sign-up">Sign up</a>
   <%}%>
+  <a href="/message-board">Message Board</a>
 </body>
 </html>

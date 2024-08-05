@@ -1,7 +1,7 @@
 const { body, validationResult } = require("express-validator");
 const { pool } = require("../db/pool");
 const bcrypt = require("bcryptjs");
-const { messagesTable } = require("../db/tables");
+const { usersTable } = require("../db/tables");
 
 function indexGet(req, res, next) {
   res.render("index");
@@ -42,7 +42,6 @@ const signUpPost = [
           column: "email",
           condition: `= '${value}'`,
         });
-
         const user = rows[0];
         console.log("user ->", user);
         if (user) {
@@ -115,20 +114,6 @@ function logInGet(req, res, next) {
   res.render("log-in-form");
 }
 
-function logOutGet(req, res, next) {
-  if (!req.isAuthenticated()) {
-    return res.redirect("/log-in", {
-      message: "Must be logged in first",
-    });
-  }
-  req.logOut((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
-}
-
 function joinClubGet(req, res, next) {
   res.render("join-club-form");
 }
@@ -188,7 +173,6 @@ module.exports = {
   signUpGet,
   signUpPost,
   logInGet,
-  logOutGet,
   joinClubGet,
   joinClubPost,
   messageBoardGet,
