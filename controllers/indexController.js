@@ -1,6 +1,7 @@
 const { body, validationResult } = require("express-validator");
 const { pool } = require("../db/pool");
 const bcrypt = require("bcryptjs");
+const { messagesTable } = require("../db/tables");
 
 function indexGet(req, res, next) {
   res.render("index");
@@ -165,6 +166,23 @@ const joinClubPost = [
   },
 ];
 
+async function messageBoardGet(req, res, next) {
+  try {
+    const { rows } = await pool.query(`
+      SELECT messages.*, users.id AS user_id, first_name, last_name 
+      FROM messages
+      JOIN users
+      ON messages.user_id = users.id
+      LIMIT 100;`);
+    
+    res.render('message-board', {
+      messages: rows,
+    })
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   indexGet,
   signUpGet,
@@ -173,4 +191,5 @@ module.exports = {
   logOutGet,
   joinClubGet,
   joinClubPost,
+  messageBoardGet,
 };

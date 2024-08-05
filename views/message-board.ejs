@@ -1,5 +1,6 @@
 <h1>Message Board</h1>
 <div class="message-board">
+<% if (locals.messages) { %>
     <% messages.forEach(msg => { %>
         <div class="message-container">
             <h2><%= msg.title %></h2>
@@ -10,4 +11,7 @@
             </div>
         </div>
     <% }) %>
+<% } else { %>
+    <p>No messages here!</p>
+<% } %>
 </div>

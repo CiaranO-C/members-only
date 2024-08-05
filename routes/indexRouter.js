@@ -12,6 +12,8 @@ const memberRouter = require("./memberRouter");
 
 const indexRouter = Router();
 
+indexRouter.get('/message-board', indexController.messageBoardGet)
+
 indexRouter.get("/", indexController.indexGet);
 
 indexRouter.get("/sign-up", indexController.signUpGet);
@@ -36,5 +38,7 @@ indexRouter.post("/join-club", isUser, indexController.joinClubPost);
 
 indexRouter.use("/member", isMember, memberRouter);
 indexRouter.use("/admin", isAdmin, adminRouter);
+
+
 
 module.exports = indexRouter;
