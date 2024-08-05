@@ -6,9 +6,12 @@
             <h2><%= msg.title %></h2>
             <p><%= msg.text %></p>
             <div class="message-info">
-                <span><%= msg.username %></span>
-                <span><%= msg.sent_at %></span>
+                <span><%= !currentUser || !currentUser.member ? 'Anonymous' : msg.username %></span>
+                <span><%= !currentUser || !currentUser.member ? '....' :  msg.sent_at %></span>
             </div>
+            <% if (locals.currentUser.admin) { %>
+               <a href="/admin/delete-message/<%= msg.id %>">delete</a>
+            <% } %>
         </div>
     <% }) %>
 <% } else { %>

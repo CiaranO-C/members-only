@@ -1,9 +1,10 @@
 const { Router } = require("express");
+const adminController = require("../controllers/adminController");
 
 const adminRouter = Router();
 
-adminRouter.get("/", (req, res) => {
-  res.send("This is the admin page");
-});
+adminRouter.get("/", adminController.adminHomeGet);
+
+adminRouter.get("/delete-message/:id", adminController.deleteMessage);
 
 module.exports = adminRouter;
