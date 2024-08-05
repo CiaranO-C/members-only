@@ -1,7 +1,6 @@
 const { body, validationResult } = require("express-validator");
 const { pool } = require("../db/pool");
 const bcrypt = require("bcryptjs");
-const { errors } = require("formidable");
 
 function joinAdminGet(req, res, next) {
   res.render("join-admin-form");
@@ -42,45 +41,7 @@ const joinAdminPost = [
   },
 ];
 
-function messageFormGet(req, res, next) {
-  res.render("create-message-form");
-}
-
-const messageFormPost = [
-  body("title")
-    .notEmpty()
-    .withMessage("title cannot be empty")
-    .trim()
-    .isLength({ min: 1, max: 35 })
-    .withMessage("Title between 1-35 characters")
-    .escape(),
-  body("text")
-    .notEmpty()
-    .withMessage("message must have content")
-    .trim()
-    .isLength({ min: 1, max: 1000 })
-    .withMessage("Message exceeds character limit")
-    .escape(),
-  async function (req, res, next) {
-    const { title, text } = req.body;
-    const err = validationResult(req);
-    if (!err.isEmpty()) {
-      return res.render("create-message-form", {
-        errors: err.array({ onlyFirstError: true }),
-        values: { title, text },
-      });
-    }
-
-    const { rows } = await pool.query('INSERT INTO messages(user_id, title, text) VALUES($1, $2, $3) RETURNING *;', [req.user.id, title, text])
-    console.log(rows);
-    console.log('message added to db');
-    res.redirect('/message-board');
-  },
-];
-
 module.exports = {
   joinAdminGet,
   joinAdminPost,
-  messageFormGet,
-  messageFormPost,
 };

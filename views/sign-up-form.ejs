@@ -13,35 +13,35 @@ function getErrors(path){
 <body>
   <h1>Sign Up</h1>
   <form action="" method="POST">
-    <label for="username">First Name</label>
+    <label for="username">First Name*</label>
     <input id="username" name="firstName" placeholder="John" type="text" value="<%=locals.values ? values.firstName : ''%>"/>
     <ul class="error container">
       <% if(locals.errors) { getErrors('firstName').forEach(err => { %>
         <li><%= err.msg %></li>
         <% })} %>
     </ul>
-    <label for="lastName">Last Name</label>
+    <label for="lastName">Last Name*</label>
     <input id="lastName" name="lastName" placeholder="Smith" type="text" value="<%=locals.values ? values.lastName : ''%>"/>
     <ul class="error container">
       <% if(locals.errors) { getErrors('lastName').forEach(err => { %>
         <li><%= err.msg %></li>
         <% })} %>
     </ul>
-    <label for="email">Email</label>
+    <label for="email">Email*</label>
     <input id="email" name="email" placeholder="johnsmith@members.com" type="email" value="<%=locals.values ? values.email : ''%>"/>
     <ul class="error container">
       <% if(locals.errors) { getErrors('email').forEach(err => { %>
         <li><%= err.msg %></li>
         <% })} %>
     </ul>
-    <label for="password">Password</label>
+    <label for="password">Password*</label>
     <input id="password" name="password" type="password" value="<%=locals.values ? values.password : ''%>"/>
     <ul class="error container">
       <% if(locals.errors) { getErrors('password').forEach(err => { %>
         <li><%= err.msg %></li>
         <% })} %>
     </ul>
-    <label for="confirmPassword">Confirm Password</label>
+    <label for="confirmPassword">Confirm Password*</label>
     <input id="confirmPassword" name="confirmPassword" type="password"/>
     <ul class="error container">
       <% if(locals.errors) { getErrors('confirmPassword').forEach(err => { %>

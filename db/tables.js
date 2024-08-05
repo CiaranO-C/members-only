@@ -85,7 +85,6 @@ function Table(tableName) {
 
   this.select = async function (options) {
     const { select = null, column, condition } = options;
-
     let isValid = await validateColumns(column);
 
     if (!isValid) {
